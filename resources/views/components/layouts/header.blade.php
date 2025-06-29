@@ -13,7 +13,7 @@
 
         <!-- Bouton -->
         <div class="hidden md:block">
-            <a href="#" class="bg-indigo-600 text-white px-4 py-2 rounded-xl shadow hover:bg-indigo-700 transition">Connexion</a>
+            <a href="{{ route('logout') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-xl shadow hover:bg-indigo-700 transition">Déconnexion</a>
         </div>
 
         <!-- Burger menu -->
@@ -33,15 +33,7 @@
         <a href="#" class="block text-gray-700 hover:text-indigo-600 px-2">Services</a>
         <a href="#" class="block text-gray-700 hover:text-indigo-600 px-2">À propos</a>
         <a href="#" class="block text-gray-700 hover:text-indigo-600 px-2">Contact</a>
-        <a href="#" class="block bg-indigo-600 text-white text-center py-2 rounded-xl mt-2">Connexion</a>
+        <a href="#" class="block bg-indigo-600 text-white text-center py-2 rounded-xl mt-2">Déconnexion</a>
     </div>
 
-    <!-- JS simple pour toggler le menu -->
-    <script>
-        const btn = document.getElementById('menu-btn');
-        const menu = document.getElementById('menu');
-        btn.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
-        });
-    </script>
 </nav>
