@@ -11,10 +11,24 @@
         @livewireStyles
     </head>
     <body>
+    <div id="global-livewire-loader" style="display:none;">
+        <div class="fixed top-0 left-0 w-full h-1 bg-blue-500 z-50 animate-pulse"></div>
+    </div>
     <livewire:header />
     <div class="container mx-auto px-4 mt-2">
         {{ $slot }}
     </div>
+    <script>
+        document.addEventListener('livewire:load', function () {
+            window.addEventListener('livewire:request-start', () => {
+                document.getElementById('global-livewire-loader').style.display = 'block';
+                console.log("tets")
+            });
+            window.addEventListener('livewire:request-finished', () => {
+                document.getElementById('global-livewire-loader').style.display = 'none';
+            });
+        });
+    </script>
     @livewireScripts
     </body>
 </html>

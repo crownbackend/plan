@@ -29,6 +29,14 @@
                 Export CSV
             </button>
         </div>
+        <div>
+            @php
+                $anneeAffichee = $startDate ? \Carbon\Carbon::parse($startDate)->year : now()->year;
+            @endphp
+            <span class="inline-block px-4 py-2 rounded bg-gray-100 text-gray-700 font-semibold shadow border border-gray-300">
+                Année : {{ $anneeAffichee }}
+            </span>
+        </div>
     </div>
 
     <div class="overflow-auto border rounded shadow-sm">
@@ -36,9 +44,40 @@
             <thead class="bg-gray-100">
             <tr>
                 <th class="border border-gray-300 p-2 text-left">Utilisateur</th>
-                @foreach (range(0, 6) as $i)
-                    <th class="border border-gray-300 p-2 text-center">
-                        {{ \Carbon\Carbon::parse($startDate)->addDays($i)->translatedFormat('D d/m') }}
+                @php
+                    function joursFeries($annee) {
+                        $dates = [
+                            "$annee-01-01", "$annee-05-01", "$annee-05-08", "$annee-07-14",
+                            "$annee-08-15", "$annee-11-01", "$annee-11-11", "$annee-12-25"
+                        ];
+                        $paques = date('Y-m-d', easter_date($annee));
+                        $dates[] = date('Y-m-d', strtotime("$paques +1 day")); // Lundi de Pâques
+                        $dates[] = date('Y-m-d', strtotime("$paques +39 days")); // Ascension
+                        $dates[] = date('Y-m-d', strtotime("$paques +50 days")); // Lundi de Pentecôte
+                        return $dates;
+                    }
+                    $joursFeries = joursFeries(\Carbon\Carbon::parse($startDate)->year);
+                    $joursAffiches = [];
+                    foreach(range(0, 6) as $i) {
+                        $jour = \Carbon\Carbon::parse($startDate)->addDays($i);
+                        // On ne prend que lundi à vendredi
+                        if ($jour->isWeekend()) continue;
+                        $joursAffiches[] = [
+                            'date' => $jour,
+                            'ferie' => in_array($jour->format('Y-m-d'), $joursFeries)
+                        ];
+                    }
+                @endphp
+                @foreach ($joursAffiches as $item)
+                    @php
+                        $jour = $item['date'];
+                        $ferie = $item['ferie'];
+                    @endphp
+                    <th class="border border-gray-300 p-2 text-center {{ $ferie ? 'bg-gray-50 text-gray-400 italic' : '' }}">
+                        {{ $jour->translatedFormat('D d/m') }}
+                        @if($ferie)
+                            <span title="Jour férié">🎉</span>
+                        @endif
                     </th>
                 @endforeach
             </tr>
@@ -47,13 +86,17 @@
             @forelse ($users as $user)
                 <tr class="hover:bg-gray-50">
                     <td class="border border-gray-300 p-2 font-semibold">{{ $user->name }}</td>
-                    @foreach (range(0, 6) as $i)
+                    @foreach ($joursAffiches as $item)
                         @php
-                            $date = \Carbon\Carbon::parse($startDate)->addDays($i)->format('Y-m-d');
+                            $jour = $item['date'];
+                            $date = $jour->format('Y-m-d');
+                            $ferie = $item['ferie'];
                             $status = optional($user->workLocations->firstWhere('date', $date))->location_type;
                         @endphp
-                        <td class="border border-gray-300 p-2 text-center text-lg">
-                            @if ($status === 'teletravail')
+                        <td class="border border-gray-300 p-2 text-center text-lg {{ $ferie ? 'bg-gray-50 text-gray-400 italic' : '' }}">
+                            @if ($ferie)
+                                <span title="Jour férié">—</span>
+                            @elseif ($status === 'teletravail')
                                 🏡
                             @elseif ($status === 'sur_site')
                                 🏢
@@ -73,6 +116,6 @@
     </div>
 
     <div class="mt-4">
-        {{ $users->links() }}
+        {{ $users->links('pagination::tailwind') }}
     </div>
 </div>
