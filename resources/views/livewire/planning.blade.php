@@ -21,14 +21,6 @@
             />
         </div>
 
-        <div class="ml-auto">
-            <button
-                wire:click="exportCsv"
-                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 shadow"
-            >
-                Export CSV
-            </button>
-        </div>
         <div>
             @php
                 $anneeAffichee = $startDate ? \Carbon\Carbon::parse($startDate)->year : now()->year;
@@ -36,6 +28,14 @@
             <span class="inline-block px-4 py-2 rounded bg-gray-100 text-gray-700 font-semibold shadow border border-gray-300">
                 Année : {{ $anneeAffichee }}
             </span>
+        </div>
+        <div class="ml-auto">
+            <button
+                wire:click="exportCsv"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 shadow"
+            >
+                Export CSV
+            </button>
         </div>
     </div>
 
