@@ -24,3 +24,7 @@ Route::get('/logout', function (\Illuminate\Http\Request $request) {
 Route::get('/dashboard', \App\Livewire\Dashboard\DashBoard::class)
     ->middleware('auth')
     ->name('dashboard');
+
+Route::get('/ajouter/dates', \App\Livewire\AddToPlanning::class)
+->middleware('auth')
+->name('ajouter.dates');

@@ -1,7 +1,9 @@
 <nav class="bg-white shadow-md px-6 py-4">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
         <!-- Logo -->
-        <div class="text-2xl font-bold text-indigo-600">MonLogo</div>
+        <a href="{{ route('dashboard') }}">
+            <div class="text-2xl font-bold text-indigo-600">MonLogo</div>
+        </a>
 
         <!-- Menu desktop -->
         <div class="hidden md:flex space-x-6">

@@ -66,8 +66,8 @@ class Planning extends Component
                     $date = $jour->format('Y-m-d');
                     $status = optional($user->workLocations->firstWhere('date', $date))->location_type;
                     $icon = match ($status) {
-                        'teletravail' => '🏡',
-                        'sur_site' => '🏢',
+                        'teletravail' => '🏡 Télétravail',
+                        'sur_site' => '🏢 Sur site',
                         default => '-',
                     };
                     $row[] = $icon;

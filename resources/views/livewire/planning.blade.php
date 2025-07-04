@@ -36,6 +36,12 @@
             >
                 Export CSV
             </button>
+            <a
+                href="{{ route('ajouter.dates') }}"
+                class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 shadow transition"
+            >
+                Ajouter mes jours
+            </a>
         </div>
     </div>
 
@@ -97,9 +103,9 @@
                             @if ($ferie)
                                 <span title="Jour férié">—</span>
                             @elseif ($status === 'teletravail')
-                                🏡
+                                🏡 Télétravaille
                             @elseif ($status === 'sur_site')
-                                🏢
+                                🏢 Sur site
                             @else
                                 -
                             @endif
