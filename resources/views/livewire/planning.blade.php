@@ -38,7 +38,14 @@
             </a>
         </div>
     </div>
-
+    <!-- 🟡 Notice explicative -->
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-sm text-yellow-800 rounded shadow-sm">
+        <strong>🛠️ Modifier un jour existant ?</strong><br>
+        Pour changer un jour déjà renseigné (par exemple passer de télétravail à sur site),
+        allez sur <a href="{{ route('ajouter.dates') }}" class="underline text-yellow-700 font-semibold hover:text-yellow-900">la page d’ajout</a>,
+        sélectionnez le <strong>mode « dates »</strong>, puis choisissez la date concernée.
+        Le système mettra à jour l’entrée si elle existe, sinon il la créera.
+    </div>
     <div class="overflow-auto border rounded shadow-sm">
         <table class="table-auto w-full text-sm border-collapse border border-gray-300">
             <thead class="bg-gray-100">
