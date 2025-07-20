@@ -13,17 +13,22 @@ class Planning extends Component
 {
     use WithPagination, WithoutUrlPagination;
 
-    public $search = '';
+    public string $search = '';
     public $startDate;
 
     protected $queryString = ['search', 'startDate'];
 
-    public function mount()
+    public function mount(): void
     {
-        $this->startDate = $this->startDate ?? Carbon::now()->startOfWeek()->format('Y-m-d');
+        $dayOfWeek = Carbon::now()->dayOfWeekIso; // 1 = lundi, 7 = dimanche
+        if ($dayOfWeek <= 5) {
+            $this->startDate = Carbon::now()->startOfWeek()->format('Y-m-d');
+        } else {
+            $this->startDate = Carbon::now()->addWeek()->startOfWeek()->format('Y-m-d');
+        }
     }
 
-    public function updated($property)
+    public function updated($property): void
     {
         if ($property === 'search') {
             $this->search = substr($this->search, 0, 100); // Limite à 100 caractères
@@ -36,54 +41,6 @@ class Planning extends Component
         if (in_array($property, ['search', 'startDate'])) {
             $this->resetPage();
         }
-    }
-
-    public function exportCsv()
-    {
-        $users = $this->getFilteredUsers();
-        $startDate = Carbon::parse($this->startDate);
-
-        // Récupère les jours fériés dynamiquement
-        $joursFeries = $this->getJoursFeries($startDate->year);
-
-        $response = new StreamedResponse(function () use ($users, $startDate, $joursFeries) {
-            $handle = fopen('php://output', 'w');
-
-            $header = ['Utilisateur'];
-            // On boucle sur 7 jours mais on n’ajoute QUE lundi à vendredi hors férié
-            for ($i = 0; $i < 7; $i++) {
-                $jour = $startDate->copy()->addDays($i);
-                if ($jour->isWeekend() || in_array($jour->format('Y-m-d'), $joursFeries)) continue;
-                $header[] = $jour->translatedFormat('D d/m');
-            }
-            fputcsv($handle, $header);
-
-            foreach ($users as $user) {
-                $row = [$user->name];
-                for ($i = 0; $i < 7; $i++) {
-                    $jour = $startDate->copy()->addDays($i);
-                    if ($jour->isWeekend() || in_array($jour->format('Y-m-d'), $joursFeries)) continue;
-                    $date = $jour->format('Y-m-d');
-                    $status = optional($user->workLocations->firstWhere('date', $date))->location_type;
-                    $icon = match ($status) {
-                        'teletravail' => '🏡 Télétravail',
-                        'sur_site' => '🏢 Sur site',
-                        default => '-',
-                    };
-                    $row[] = $icon;
-                }
-                fputcsv($handle, $row);
-            }
-
-            fclose($handle);
-        });
-
-        $filename = 'planning_' . $startDate->format('Ymd') . '.csv';
-
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Disposition', "attachment; filename=\"$filename\"");
-
-        return $response;
     }
 
     public function getFilteredUsers()
@@ -100,7 +57,7 @@ class Planning extends Component
         $users = User::with('workLocations')
             ->when($this->search, fn($q) => $q->where('name', 'like', '%' . $this->search . '%'))
             ->orderBy('name')
-            ->paginate(20);
+            ->get();
 
         $startDate = Carbon::parse($this->startDate);
         $joursFeries = $this->getJoursFeries($startDate->year);
@@ -119,8 +76,7 @@ class Planning extends Component
         ]);
     }
 
-    // Retourne un tableau des jours fériés pour une année (France métropolitaine)
-    public function getJoursFeries($annee)
+    public function getJoursFeries($annee): array
     {
         // Dates fixes
         $dates = [

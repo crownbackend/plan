@@ -30,12 +30,6 @@
             </span>
         </div>
         <div class="ml-auto">
-            <button
-                wire:click="exportCsv"
-                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 shadow"
-            >
-                Export CSV
-            </button>
             <a
                 href="{{ route('ajouter.dates') }}"
                 class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 shadow transition"
@@ -119,9 +113,5 @@
             @endforelse
             </tbody>
         </table>
-    </div>
-
-    <div class="mt-4">
-        {{ $users->links('pagination::tailwind') }}
     </div>
 </div>

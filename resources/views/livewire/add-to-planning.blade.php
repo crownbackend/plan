@@ -45,23 +45,31 @@
 
         <!-- Section Récurrence -->
         @if ($mode === 'recurrence')
-            <div>
-                <label class="block font-semibold mb-2 text-gray-700">Sélectionnez les jours de la semaine</label>
-                <div class="grid grid-cols-2 gap-2 mb-3">
-                    @foreach(['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'] as $day)
-                        <div>
-                            <label class="flex items-center gap-1 text-gray-600 mb-1">
+            <div class="space-y-6">
+
+                <label class="block font-semibold text-gray-700">Sélectionnez les jours de la semaine</label>
+
+                @foreach(['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'] as $day)
+                    <div class="flex flex-col space-y-2">
+                        <div class="flex items-center justify-between gap-4">
+                            <label class="flex items-center gap-2 text-gray-700 font-medium">
                                 <input type="checkbox" wire:model="recurrence_days" value="{{ $day }}" class="accent-indigo-500 rounded">
                                 {{ $day }}
                             </label>
-                            <select wire:model="recurrence_types.{{ $day }}" class="rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 w-full mt-1">
+
+                            <select wire:model="recurrence_types.{{ $day }}" class="rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 w-1/2">
                                 <option value="teletravail">Télétravail</option>
                                 <option value="sur_site">Sur site</option>
                             </select>
                         </div>
-                    @endforeach
-                </div>
-                @error('recurrence_days') <div class="text-red-600 text-sm">{{ $message }}</div> @enderror
+                        <hr class="border-t border-gray-300">
+                    </div>
+                @endforeach
+
+                @error('recurrence_days')
+                <div class="text-red-600 text-sm">{{ $message }}</div>
+                @enderror
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block font-semibold mb-1 text-gray-700">Date de début</label>
@@ -76,6 +84,7 @@
                 </div>
             </div>
         @endif
+
 
         <div class="flex justify-end pt-4">
             <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-semibold shadow">
