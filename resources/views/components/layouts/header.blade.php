@@ -8,7 +8,7 @@
         <!-- Menu desktop -->
         <div class="hidden md:flex space-x-6">
             <a href="{{ route('dashboard') }}" class="text-gray-600 hover:text-indigo-600 transition">Accueil</a>
-            <a href="#" class="text-gray-600 hover:text-indigo-600 transition">Salle de réunion</a>
+            <a href="{{ route('salles') }}" class="text-gray-600 hover:text-indigo-600 transition">Salle de réunion</a>
         </div>
 
         <!-- Bouton -->

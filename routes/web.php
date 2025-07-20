@@ -28,3 +28,15 @@ Route::get('/dashboard', \App\Livewire\Dashboard\DashBoard::class)
 Route::get('/ajouter/dates', \App\Livewire\AddToPlanning::class)
 ->middleware('auth')
 ->name('ajouter.dates');
+
+Route::get('salles', \App\Livewire\CheckRoomAvailability::class)
+->middleware('auth')
+->name('salles');
+
+Route::get('salles/creer', \App\Livewire\CreateMeetingRoom::class)
+->middleware('auth')
+->name('salles.creer');
+
+Route::get('salles/reserver', \App\Livewire\CreateRoomReservation::class)
+->middleware('auth')
+->name('salles.reservation');

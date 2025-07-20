@@ -23,6 +23,6 @@ class RoomReservation extends Model
 
     public function attendees()
     {
-        return $this->belongsToMany(User::class, 'reservation_attendees');
+        return $this->belongsToMany(User::class, 'reservation_attendees', 'reservation_id', 'user_id');
     }
 }
