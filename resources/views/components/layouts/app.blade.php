@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>{{ $title ?? 'Page Title' }}</title>
+        <title>{{ $title ?? 'Planning' }}</title>
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @endif
@@ -19,6 +19,15 @@
         {{ $slot }}
     </div>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuBtn = document.getElementById('menu-btn');
+            const menu = document.getElementById('menu');
+
+            menuBtn.addEventListener('click', function () {
+                menu.classList.toggle('hidden');
+            });
+        });
+
         document.addEventListener('livewire:load', function () {
             window.addEventListener('livewire:request-start', () => {
                 document.getElementById('global-livewire-loader').style.display = 'block';

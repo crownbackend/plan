@@ -7,10 +7,8 @@
 
         <!-- Menu desktop -->
         <div class="hidden md:flex space-x-6">
-            <a href="#" class="text-gray-600 hover:text-indigo-600 transition">Accueil</a>
-            <a href="#" class="text-gray-600 hover:text-indigo-600 transition">Services</a>
-            <a href="#" class="text-gray-600 hover:text-indigo-600 transition">À propos</a>
-            <a href="#" class="text-gray-600 hover:text-indigo-600 transition">Contact</a>
+            <a href="{{ route('dashboard') }}" class="text-gray-600 hover:text-indigo-600 transition">Accueil</a>
+            <a href="#" class="text-gray-600 hover:text-indigo-600 transition">Salle de réunion</a>
         </div>
 
         <!-- Bouton -->
@@ -31,11 +29,9 @@
 
     <!-- Menu mobile -->
     <div id="menu" class="md:hidden mt-4 space-y-2 hidden">
-        <a href="#" class="block text-gray-700 hover:text-indigo-600 px-2">Accueil</a>
-        <a href="#" class="block text-gray-700 hover:text-indigo-600 px-2">Services</a>
-        <a href="#" class="block text-gray-700 hover:text-indigo-600 px-2">À propos</a>
-        <a href="#" class="block text-gray-700 hover:text-indigo-600 px-2">Contact</a>
-        <a href="#" class="block bg-indigo-600 text-white text-center py-2 rounded-xl mt-2">Déconnexion</a>
+        <a href="{{ route('dashboard') }}" class="text-gray-600 hover:text-indigo-600 transition">Accueil</a>
+        <a href="#" class="text-gray-600 hover:text-indigo-600 transition">Salle de réunion</a>
+        <a href="{{ route('logout') }}" class="block bg-indigo-600 text-white text-center py-2 rounded-xl mt-2">Déconnexion</a>
     </div>
 
 </nav>

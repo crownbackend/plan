@@ -63,33 +63,29 @@ class AddToPlanning extends Component
         $this->validate();
 
         if ($this->mode === 'dates') {
-            $entries = $this->generateDateEntries();
-            WorkLocation::insert($entries);
+            foreach ($this->dates as $index => $date) {
+                WorkLocation::updateOrCreate(
+                    [
+                        'user_id' => auth()->id(),
+                        'date' => Carbon::parse($date)->format('Y-m-d'),
+                    ],
+                    [
+                        'location_type' => $this->date_types[$index] ?? 'teletravail',
+                        'updated_at' => now(),
+                    ]
+                );
+            }
+
             session()->flash('success', 'Les dates ont été enregistrées avec succès.');
-        } elseif ($this->mode === 'recurrence') {
+        }
+
+        elseif ($this->mode === 'recurrence') {
             $entries = $this->generateRecurrenceEntries();
-            WorkLocation::insert($entries);
+
+            WorkLocation::insert($entries); // Tu peux aussi remplacer par updateOrCreate si tu veux éviter les doublons
+
             session()->flash('success', 'Les dates récurrentes ont été enregistrées avec succès.');
         }
-
-    }
-
-
-    public function generateDateEntries(): array
-    {
-        $entries = [];
-
-        foreach ($this->dates as $index => $date) {
-            $entries[] = [
-                'user_id' => auth()->id(),
-                'date' => Carbon::parse($date)->format('Y-m-d'),
-                'location_type' => $this->date_types[$index] ?? 'teletravail',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-        }
-
-        return $entries;
     }
 
     public function generateRecurrenceEntries(): array
@@ -104,7 +100,7 @@ class AddToPlanning extends Component
 
             if (in_array($dayName, $this->recurrence_days)) {
                 $entries[] = [
-                    'user_id' => auth()->id(), // ou $this->user_id si tu le passes en paramètre
+                    'user_id' => auth()->id(),
                     'date' => $start->toDateString(),
                     'location_type' => $this->recurrence_types[$dayName] ?? 'teletravail',
                     'created_at' => now(),
@@ -123,3 +119,4 @@ class AddToPlanning extends Component
         return view('livewire.add-to-planning');
     }
 }
+
